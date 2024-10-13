@@ -12,36 +12,48 @@ This Colab environment is pre-configured for easy testing of the Retrieval-Augme
 1. **Open the Colab Notebook**: 
    Click the link above to launch the notebook in Google Colab.
 
-2. **Set Runtime**: 
-   Enable GPU for better performance on local inference (requires colab-pro, suggested for llama-8B, etc):
+2. **Set Runtime (Optional)**: 
+   Enable GPU for better performance on local inference (suggested for llama-8B, etc):
+   - Default local model is llama3.2:3b
    - Go to `Runtime` > `Change runtime type`.
-   - Set **Hardware accelerator** to `GPU` and click **Save**.
+   - Set **Hardware accelerator** to `T4` and click **Save**. (Accelerate local inference, Requires Colab Pro)
+   - Set Runtime to High-RAM Option (Reduce install time from 10min to 5min, Requires Colab Pro)
 
-3. **Install Dependencies**:
-   Run the first cell to install all necessary libraries and tools, including PostgreSQL, TimescaleDB, pgVector, and LLM integrations like OpenAI or Local Ollama.
+4. **Install Dependencies**:
+   - Select 'Runtime->Run All' to install all necessary libraries and tools, including PostgreSQL, TimescaleDB, pgVector, and LLM integrations like OpenAI or Local Ollama.
 
-4. **Configure Settings**:
-   - Modify the configuration parameters if needed (e.g., LLM Mode, API keys) by editing the `CFG` class.
-   - Ensure you set up your API keys if you are using external services like OpenAI or Anthropic. For local inference, ensure your runtime supports Ollama.
+5. **Configure Settings**:
+   - Modify the configuration parameters if needed (e.g., self.LLM_MODE = LLM_Mode.OpenAI, self.PGAI_MODE = PGAI_Mode.Function) by editing the `CFG` class.
+   - API keys for testing have been preloaded, may run out and require replacement with your own keys. For local inference (self.LLM_MODE = LLM_Mode.LocalOllama), Ollama will be automatically installed by default.
 
-5. **Load Content**:
+6. **Load Content**:
    - Use the "Load from URLs" tab in the Gradio interface to input Wikipedia URLs or other document sources.
    - Example URLs are pre-loaded for testing.
 
-6. **Ask Questions**:
+7. **Ask Questions**:
    - Switch to the "Ask Question" tab.
    - Type your question in the provided textbox and hit "Submit".
    - The system will retrieve relevant documents from the database and generate an answer using the selected LLM.
 
-7. **Monitor Output**:
+8. **Monitor Output**:
    The Gradio interface will display both the answer and the context retrieved from the database. You can adjust the number of chunks to fetch and whether to use context or not.
 
 ## Mode Selections Available
-- **LLM Modes**: Choose between `LocalOllama`, `OpenAI`, or `AnCo (Anthropic + Cohere)` models.
-- **PGAI Modes**: Interact with PostgreSQL and pgVector using either SQL or stored function calls.
+- **CFG.LLM_Mode**: Choose between `LocalOllama`, `OpenAI`, or `AnCo (Anthropic + Cohere)` models.
+   - class LLM_Mode(Enum):
+       LocalOllama = 1 # use local Ollama server
+       OpenAI      = 2 # use Openai through pgai
+       AnCo        = 3 # use Anthropic for chat and Cohere for embedding
+- **CFG.PGAI_Mode**: Choose from PostgreSQL and pgVector using either SQL or stored function calls.
+   - class PGAI_Mode(Enum):
+       Disabled = 1 # never use pgai to access ai, use python ollama module instead
+       Sql      = 2 # use SQL to access pgai functions
+       Function = 3 # define postgres stored functions to access pgai functions
 
 ## Customization
 To customize the setup (e.g., change models, vector embedding sizes), modify the respective sections in the notebook:
+- To change Llama model when running local inference, change MODEL_NAME string
+   - See 'self.CHAT_MODEL = "llama3.2:3b" #CHANGE THIS LINE TO SPECIFY LOCAL LLAMA MODEL'
 - LLM configurations are located in the `CFG` class.
 - Document loading and embedding processes are controlled by the `Vector_Store` class.
 
@@ -52,19 +64,14 @@ To customize the setup (e.g., change models, vector embedding sizes), modify the
    https://en.wikipedia.org/wiki/World_War_II
    https://en.wikipedia.org/wiki/World_War_I
    ```
+   Here, after loading the Wikipedia documents, embeddings are generated for the document chunks and then put in the vector store.
    
-2. Ask a question related to the content:
+3. Ask a question related to the content:
    ```text
    How many lives were lost in World War Two?
    ```
 
 The system will fetch relevant document chunks and use the context to generate a response using the selected LLM.
-
-## Testing Functions
-Several test functions are included to validate the system:
-- `test_load_urls()`: Test loading documents into the database.
-- `test_fetch_documents()`: Test fetching documents by keywords and embeddings.
-- `test_rag()`: Run a full RAG chain to see how the system retrieves and generates answers.
 
 ## License
 This project is open-source and available under the MIT license.
