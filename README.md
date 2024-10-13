@@ -40,15 +40,19 @@ This Colab environment is pre-configured for easy testing of the Retrieval-Augme
 
 ## Mode Selections Available
 - **CFG.LLM_Mode**: Choose between `LocalOllama`, `OpenAI`, or `AnCo (Anthropic + Cohere)` models.
-   - class LLM_Mode(Enum):
+   - ```
+     class LLM_Mode(Enum):
        LocalOllama = 1 # use local Ollama server
        OpenAI      = 2 # use Openai through pgai
        AnCo        = 3 # use Anthropic for chat and Cohere for embedding
+     ```
 - **CFG.PGAI_Mode**: Choose from PostgreSQL and pgVector using either SQL or stored function calls.
-   - class PGAI_Mode(Enum):
+   - ```
+     class PGAI_Mode(Enum):
        Disabled = 1 # never use pgai to access ai, use python ollama module instead
        Sql      = 2 # use SQL to access pgai functions
        Function = 3 # define postgres stored functions to access pgai functions
+     ```
 
 ## Customization
 To customize the setup (e.g., change models, vector embedding sizes), modify the respective sections in the notebook:
