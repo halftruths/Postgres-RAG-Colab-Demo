@@ -3,7 +3,7 @@
 [Colab Demo Notebook](https://colab.research.google.com/drive/17_M4j1LR0BfY1aOrxYpvCLj1Rwyt1ey_?usp=sharing)
 
 ## Quick Start with Colab
-To quickly test out the program, use the provided Colab notebook:
+To quickly test out the program, use the provided [Colab Notebook](https://colab.research.google.com/drive/17_M4j1LR0BfY1aOrxYpvCLj1Rwyt1ey_?usp=sharing):
 
 This Colab environment is pre-configured for easy testing of the Retrieval-Augmented Generation (RAG) pipeline using PostgreSQL, pgVector, and various Language Models (LLMs). Follow the instructions below to start interacting with the system.
 
